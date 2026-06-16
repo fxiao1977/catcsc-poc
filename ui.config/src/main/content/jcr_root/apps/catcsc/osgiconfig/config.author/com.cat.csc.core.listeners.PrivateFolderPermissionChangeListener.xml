@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OSGi Configuration for PrivateFolderPermissionChangeListener - Author Instance
+
+  This configuration is specific to author instances and will override the global
+  configuration in /apps/catcsc/osgiconfig/config/
+
+  Place this file in: /apps/catcsc/osgiconfig/config.author/
+
+  This might be useful for:
+  - Enabling debug logging only on author to troubleshoot issues
+  - Using different monitored paths for author vs publish
+  - Disabling the listener on publish to reduce overhead
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="sling:OsgiConfig"
+          enabled="{Boolean}true"
+          monitoredRootPath="/content/dam"
+          monitorPropertyChanges="{Boolean}true"
+          monitorPropertyAdditions="{Boolean}true"
+          monitorPropertyRemovals="{Boolean}true"
+          monitorNestedPaths="{Boolean}true"
+          logLevel="INFO"/>
+

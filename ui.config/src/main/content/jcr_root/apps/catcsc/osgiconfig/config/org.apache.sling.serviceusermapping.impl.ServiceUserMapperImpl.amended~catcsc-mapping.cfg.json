@@ -1,0 +1,5 @@
+{
+  "user.mapping": [
+    "catcsc.core:private-folder-service=[private-folder-sysuser]"
+  ]
+}

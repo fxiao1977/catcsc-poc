@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/apps/catcsc/clientlibs"/>
+    <filter root="/apps/catcsc/components"/>
+    <filter root="/apps/catcsc/i18n"/>
+</workspaceFilter>

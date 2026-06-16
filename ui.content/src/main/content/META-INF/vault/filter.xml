@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/catcsc" mode="merge"/>
+    <filter root="/content/catcsc" mode="merge"/>
+    <filter root="/content/dam/catcsc" mode="merge">
+        <exclude pattern="/content/dam/catcsc(/.*)?"/>
+        <include pattern="/content/dam/catcsc/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/catcsc/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/catcsc" mode="merge"/>
+</workspaceFilter>

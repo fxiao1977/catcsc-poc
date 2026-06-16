@@ -1,0 +1,7 @@
+{
+    "scripts": [
+        "create path (sling:OrderedFolder) /content/dam/catcsc",
+        "create path (nt:unstructured) /content/dam/catcsc/jcr:content",
+        "set properties on /content/dam/catcsc/jcr:content\n  set cq:conf{String} to /conf/catcsc\n  set jcr:title{String} to \"CAT CSC\"\nend"
+    ]
+}
