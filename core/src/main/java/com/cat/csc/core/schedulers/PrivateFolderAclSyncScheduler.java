@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.day.cq.search.PredicateGroup;
 
 @Component(service = Runnable.class, immediate = true)
-@Designate(ocd = SimpleSchedulerConfiguration.class)
+@Designate(ocd = PrivateFolderAclSyncSchedulerConfiguration.class)
 public class PrivateFolderAclSyncScheduler implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrivateFolderAclSyncScheduler.class);
@@ -43,7 +43,7 @@ public class PrivateFolderAclSyncScheduler implements Runnable {
     @Reference
     private QueryBuilder queryBuilder;
 
-    private SimpleSchedulerConfiguration config;
+    private PrivateFolderAclSyncSchedulerConfiguration config;
 
     private String jobName = PrivateFolderAclSyncScheduler.class.getName();
     private AtomicBoolean running = new AtomicBoolean(false);
@@ -51,12 +51,12 @@ public class PrivateFolderAclSyncScheduler implements Runnable {
 
     @Activate
     @Modified
-    protected void activate(final SimpleSchedulerConfiguration config) {
+    protected void activate(final PrivateFolderAclSyncSchedulerConfiguration config) {
 
         addScheduler(config);
     }
 
-    private void addScheduler(SimpleSchedulerConfiguration config) {
+    private void addScheduler(PrivateFolderAclSyncSchedulerConfiguration config) {
 
         this.config = config;
         if (!config.enable_scheduler()) return;
@@ -72,19 +72,19 @@ public class PrivateFolderAclSyncScheduler implements Runnable {
 
 
     // Custom method to deactivate or unschedule scheduler
-    public void removeScheduler(SimpleSchedulerConfiguration config) {
+    public void removeScheduler(PrivateFolderAclSyncSchedulerConfiguration config) {
         scheduler.unschedule(config.scheduler_name());
     }
 
     // On deactivate component it will unschedule scheduler
     @Deactivate
-    protected void deactivate(SimpleSchedulerConfiguration config) {
+    protected void deactivate(PrivateFolderAclSyncSchedulerConfiguration config) {
         removeScheduler(config);
     }
 
     // On component modification change status will remove and add scheduler
     @Modified
-    protected void modified(SimpleSchedulerConfiguration config) {
+    protected void modified(PrivateFolderAclSyncSchedulerConfiguration config) {
         removeScheduler(config);
         addScheduler(config);
     }

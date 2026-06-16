@@ -7,7 +7,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 @ObjectClassDefinition(name = "CATCSC Private Folder Permission Update Scheduler",
         description = "For private folders, apply same permissions to Workfront ID. "
 )
-public @interface SimpleSchedulerConfiguration {
+public @interface PrivateFolderAclSyncSchedulerConfiguration {
 
     @AttributeDefinition(
             name = "Enable Scheduler",
