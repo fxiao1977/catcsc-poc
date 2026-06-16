@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 @Component(
         service = Filter.class,
+        immediate = true,
         configurationPolicy = ConfigurationPolicy.REQUIRE,
         property = {
                 EngineConstants.SLING_FILTER_SCOPE + "=" + EngineConstants.FILTER_SCOPE_REQUEST
