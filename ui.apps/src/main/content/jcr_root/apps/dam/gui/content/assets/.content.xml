@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content jcr:primaryType="nt:unstructured">
+        <actions jcr:primaryType="nt:unstructured">
+            <secondary jcr:primaryType="nt:unstructured">
+                <workfrontLink
+                    granite:class="foundation-collection-action"
+                    granite:rel="cq-damadmin-admin-workfront-link"
+                    jcr:primaryType="nt:unstructured"
+                    sling:orderBefore="selectall"
+                    sling:resourceType="granite/ui/components/coral/foundation/collection/action"
+                    hidden="hidden"
+                    icon="workfront"
+                    target=".cq-damadmin-admin-childpages"
+                    text="Workfront"
+                    variant="actionBar"/>
+            </secondary>
+            <selection jcr:primaryType="nt:unstructured">
+                <sync-permission-to-workfront
+                    granite:class="sync-permission-to-workfront"
+                    granite:rel="cq-damadmin-admin-actions-download-activator"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/collection/action"
+                    activeSelectionCount="multiple"
+                    icon="refresh"
+                    target=".cq-damadmin-admin-childpages"
+                    text="Sync ACL To Workfront IDs"
+                    title="Sync ACL To Workfront IDs"
+                    variant="actionBar">
+                    <granite:rendercondition
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/renderconditions/and">
+                        <!-- Condition 1: Only folders selected -->
+                        <isfolder
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="/libs/dam/gui/coral/components/commons/renderconditions/isfolder"/>
+<!--                        &lt;!&ndash; Condition 2: User has modify ACL permission &ndash;&gt;-->
+<!--                        <haspermission-->
+<!--                                jcr:primaryType="nt:unstructured"-->
+<!--                                sling:resourceType="dam/gui/coral/components/commons/renderconditions/haspermissions"-->
+<!--                                privileges="[modify_access_control]"/>-->
+                    </granite:rendercondition>
+                </sync-permission-to-workfront>
+            </selection>
+        </actions>
+    </jcr:content>
+    <metadataeditor/>
+</jcr:root>
