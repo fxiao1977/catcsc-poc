@@ -1,6 +1,46 @@
 (function ($, $document) {
     "use strict";
 
+    //Listen to selection changes
+    $document.on("foundation-selections-change", function () {
+        updateButtonVisibility();
+    });
+
+    // Hide button on initial load
+    $document.ready(function () {
+        updateButtonVisibility();
+    });
+
+    // function to update button visibility
+    function updateButtonVisibility() {
+        var $button = $(".sync-permission-to-workfront");
+
+        // Hide by default
+        $button.hide();
+
+        var $selectedItems = $(".foundation-collection-item[selected]");
+        if (!$selectedItems || $selectedItems.length === 0) {
+            return; // nothing selected → keep hidden
+        }
+
+        var allFolders = true;
+
+
+        $selectedItems.each(function () {
+            var metaType = $(this)
+                .find(".foundation-collection-assets-meta")
+                .data("foundation-collection-meta-type");
+
+            if (metaType !== "directory") {
+                allFolders = false;
+            }
+        });
+
+        if (allFolders) {
+            $button.show();
+        }
+    }
+
     function showDialog(title, message) {
         // Remove any existing dialog
         $("#sync-permission-dialog").remove();
