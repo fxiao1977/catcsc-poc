@@ -51,7 +51,7 @@ public class SyncWorkfrontPermissionServlet extends SlingAllMethodsServlet {
             List<String> privateFolders = filterPrivateFolders(folders, session);
 
             if (privateFolders.isEmpty()) {
-                json.put("message", "No private folders found in selection, or you don't have permission.");
+                json.put("message", "No private folders found in selection, or you don't have permission on them.");
                 response.getWriter().write(json.toString());
                 return;
             }
@@ -68,7 +68,7 @@ public class SyncWorkfrontPermissionServlet extends SlingAllMethodsServlet {
                                 "Error processing folder " + folderPath + ": " + e.getMessage());
                     }
                 }
-                json.put("message", "Tried synced permissions for " + folders.length + " folder(s):");
+                json.put("message", "Synced permissions for " + folders.length + " folder(s):");
             }
         } catch (Exception e) {
             // Fallback JSON if something goes wrong
