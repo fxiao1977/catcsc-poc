@@ -4,4 +4,5 @@
     <filter root="/apps/catcsc/components"/>
     <filter root="/apps/catcsc/i18n"/>
     <filter root="/apps/dam" mode="update"/>
+    <filter root="/apps/granite" mode="update"/>
 </workspaceFilter>
