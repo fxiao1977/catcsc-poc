@@ -13,14 +13,6 @@
             text="Sync ACL To Workfront IDs"
             title="Sync ACL To Workfront IDs"
             variant="actionBar">
-            <granite:rendercondition
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/renderconditions/and">
-                <haspermission
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="/libs/fd/fm/gui/components/admin/renderconditions/groups"
-                    group="user-administrators"/>
-            </granite:rendercondition>
         </sync-permission-to-workfront>
     </selection>
 </jcr:root>

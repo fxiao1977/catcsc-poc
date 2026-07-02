@@ -11,20 +11,16 @@
         updateButtonVisibility();
     });
 
-    // function to update button visibility
-    function updateButtonVisibility() {
-        var $button = $(".sync-permission-to-workfront");
 
-        // Hide by default
-        $button.hide();
+    // Check if all selected items are folders
+    function allSelectedAreFolders() {
 
         var $selectedItems = $(".foundation-collection-item[selected]");
         if (!$selectedItems || $selectedItems.length === 0) {
-            return; // nothing selected → keep hidden
+            return false; // nothing selected → keep hidden
         }
 
         var allFolders = true;
-
 
         $selectedItems.each(function () {
             var metaType = $(this)
@@ -36,9 +32,60 @@
             }
         });
 
-        if (allFolders) {
-            $button.show();
+        return allFolders;
+    }
+
+    // Call rendercondition servlet to check privileges
+    function checkPrivileges(paths, callback) {
+        $.ajax({
+            url: "/bin/catcsc/check-multi-acl",
+            type: "Get",
+            dataType: "json",
+            traditional: true,
+            data: {
+                item: paths
+            },
+            success: function (response) {
+                callback(response.allowed === true);
+            },
+            error: function () {
+                callback(false);
+            }
+        });
+    }
+
+    // function to update button visibility
+    function updateButtonVisibility() {
+        var $button = $(".sync-permission-to-workfront");
+
+        // Hide by default
+        $button.hide();
+
+        // nothing selected → keep hidden
+        var $selectedItems = $(".foundation-collection-item[selected]");
+        if (!$selectedItems || $selectedItems.length === 0) {
+            return;
         }
+
+        // Must be folders
+        if (!allSelectedAreFolders()) {
+            return;
+        }
+
+        // Collect paths
+        var paths = [];
+        $selectedItems.each(function () {
+            var path = $(this).data("foundation-collection-item-id");
+            if (path) {
+                paths.push(path);
+            }
+        });
+        // Check privileges via servlet
+        checkPrivileges(paths, function (allowed) {
+            if (allowed) {
+                $button.show();
+            }
+        });
     }
 
     function showDialog(title, message) {
@@ -134,5 +181,8 @@
             }
         });
     });
+
+
+
 
 })(Granite.$, Granite.$(document));
