@@ -1,8 +1,8 @@
 {
   "scripts": [
-    "create service user private-folder-sysuser with forced path system/cq:services/catcsc",
-    "set ACL on /content/dam\n  allow jcr:all for private-folder-sysuser \nend",
-    "set ACL on /home\n  allow jcr:all for private-folder-sysuser \nend"
+    "create service user catcsc-permission-sysuser with forced path system/cq:services/catcsc",
+    "set ACL on /content/dam\n  allow jcr:all for catcsc-permission-sysuser \nend",
+    "set ACL on /home\n  allow jcr:all for catcsc-permission-sysuser \nend"
   ]
 }
 

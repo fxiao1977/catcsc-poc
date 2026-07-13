@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "jobEnabled": true,
+  "jobCron": "0 10 * * * ?",
+  "scheduler_name": "Workfront User Sync Scheduler",
+  "concurrent_scheduler": false,
+
+  "consumerGroups": [
+    "Consumers",
+    "CAN Only Consumers",
+    "WCM_Assets_Consumers",
+    "BCP Marcom - Consumers"
+  ],
+
+  "producerGroups": [
+    "Producers",
+    "CAT Only Producers",
+    "BCP Marcom - Producers",
+    "WCM_Assets_Producers"
+  ]
+}

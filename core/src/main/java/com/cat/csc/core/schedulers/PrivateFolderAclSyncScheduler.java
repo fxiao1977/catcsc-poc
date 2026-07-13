@@ -106,7 +106,7 @@ public class PrivateFolderAclSyncScheduler implements Runnable {
         LOGGER.info("CATCSC Permission Sync Scheduler started.");
 
         Map<String, Object> param = Collections.singletonMap(
-                ResourceResolverFactory.SUBSERVICE, "private-folder-service"
+                ResourceResolverFactory.SUBSERVICE, "catcsc-permission-service"
         );
 
         try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(param)) {
