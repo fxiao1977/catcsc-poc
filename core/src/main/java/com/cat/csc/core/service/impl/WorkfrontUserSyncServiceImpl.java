@@ -31,32 +31,20 @@ public class WorkfrontUserSyncServiceImpl implements WorkfrontUserSyncService {
         String email = newUserId.substring(3);
         log.info("Processing Workfront user {} (email={})", newUserId, email);
 
-        boolean matched = false;
+        boolean consumer_group_matched = false;
+        boolean producer_group_matched = false;
         UserManager userManager = resolver.adaptTo(UserManager.class);
 
         if (processGroups(resolver, userManager, sharedUserSyncConfigProvider.consumerGroups, newUser, email)) {
-            matched = true;
+            consumer_group_matched = true;
         }
 
         if (processGroups(resolver, userManager, sharedUserSyncConfigProvider.producerGroups, newUser, email)) {
-            matched = true;
+            producer_group_matched = true;
         }
 
-        if (matched) {
-            Group wfGroup = (Group) userManager.getAuthorizable("wf-workfront-users");
-            if (wfGroup != null && wfGroup.isMember(newUser)) {
-                boolean isUserRemoved = wfGroup.removeMember(newUser);
-                if(isUserRemoved){
-                    Session session = resolver.adaptTo(Session.class);
-                    if (session != null) {
-                        session.save();
-                    }
-                    log.info("Removed {} from wf-workfront-users (match found)", newUserId);
-                }
-
-            }
-        } else {
-            log.warn("No matching AEM user found for Workfront user {} — keeping in wf-workfront-users", newUserId);
+        if (!consumer_group_matched && !producer_group_matched) {
+            log.warn("No matching AEM user found for Workfront user {} ", newUserId);
         }
     }
 
