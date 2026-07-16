@@ -26,7 +26,7 @@ public @interface WorkfrontUserSyncConfig {
     @AttributeDefinition(
             name = "Scheduled Job Cron",
             description = "Cron expression for the scheduled job",
-            defaultValue = "0 0 * * * ?" // every 10 minutes
+            defaultValue = "0 0 * * * ?" // every hour
     )
     String jobCron();
 
@@ -35,10 +35,8 @@ public @interface WorkfrontUserSyncConfig {
             description = "List of consumer groups to search for matching AEM users"
     )
     String[] consumerGroups() default {
-            "Consumers",
-            "CAN Only Consumers",
-            "WCM_Assets_Consumers",
-            "BCP Marcom - Consumers"
+            "BCP Marcom - Consumers",
+            "WCM_Assets_Consumers"
     };
 
     @AttributeDefinition(
@@ -46,10 +44,9 @@ public @interface WorkfrontUserSyncConfig {
             description = "List of producer groups to search for matching AEM users"
     )
     String[] producerGroups() default {
-            "Producers",
-            "CAT Only Producers",
             "BCP Marcom - Producers",
-            "WCM_Assets_Producers"
+            "WCM_Assets_Producers1",
+            "WCM_Assets_Producers2"
     };
 
     @AttributeDefinition(

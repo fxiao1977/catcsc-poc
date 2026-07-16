@@ -1,8 +1,7 @@
 package com.cat.csc.core.listeners;
 
-import com.cat.csc.core.schedulers.WorkfrontUserSyncConfig;
 import com.cat.csc.core.service.WorkfrontUserSyncService;
-import com.cat.csc.core.service.impl.SharedUserSyncConfigProvider;
+import com.cat.csc.core.service.SharedUserSyncConfigProvider;
 import org.apache.jackrabbit.api.security.user.Authorizable;
 import org.apache.jackrabbit.api.security.user.Group;
 import org.apache.jackrabbit.api.security.user.UserManager;
@@ -11,7 +10,6 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +112,7 @@ public class WorkfrontGoupChangeListener implements EventListener {
                                 javax.jcr.Node memberNode = session.getNodeByIdentifier(memberUuid);
                                 String userId = memberNode.getProperty("rep:principalName").getString();
                                 Authorizable newWorkfrontUser = userManager.getAuthorizable(userId);
-                                syncService.syncUser(resolver, newWorkfrontUser);
+                                syncService.syncUser(resolver, newWorkfrontUser, false);
                         }
                     }
                 }

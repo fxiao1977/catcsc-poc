@@ -1,6 +1,6 @@
 package com.cat.csc.core.service.impl;
 
-import com.cat.csc.core.schedulers.WorkfrontUserSyncConfig;
+import com.cat.csc.core.service.SharedUserSyncConfigProvider;
 import com.cat.csc.core.service.WorkfrontUserSyncService;
 import org.apache.jackrabbit.api.security.user.*;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -21,7 +21,7 @@ public class WorkfrontUserSyncServiceImpl implements WorkfrontUserSyncService {
     private static final Logger log = LoggerFactory.getLogger(WorkfrontUserSyncServiceImpl.class);
 
     @Override
-    public void syncUser(ResourceResolver resolver,  Authorizable newUser) throws Exception {
+    public void syncUser(ResourceResolver resolver,  Authorizable newUser, boolean fromScheduler) throws Exception {
 
         String newUserId = newUser.getID();
         if (!newUserId.startsWith("wf-")) {
@@ -35,11 +35,11 @@ public class WorkfrontUserSyncServiceImpl implements WorkfrontUserSyncService {
         boolean producer_group_matched = false;
         UserManager userManager = resolver.adaptTo(UserManager.class);
 
-        if (processGroups(resolver, userManager, sharedUserSyncConfigProvider.consumerGroups, newUser, email)) {
+        if (processGroups(resolver, userManager, sharedUserSyncConfigProvider.getConsumerGroups(), newUser, email, fromScheduler)) {
             consumer_group_matched = true;
         }
 
-        if (processGroups(resolver, userManager, sharedUserSyncConfigProvider.producerGroups, newUser, email)) {
+        if (processGroups(resolver, userManager, sharedUserSyncConfigProvider.getProducerGroups(), newUser, email, fromScheduler)) {
             producer_group_matched = true;
         }
 
@@ -48,7 +48,7 @@ public class WorkfrontUserSyncServiceImpl implements WorkfrontUserSyncService {
         }
     }
 
-    private boolean processGroups(ResourceResolver resourceResolver, UserManager userManager, String[] groupNames, Authorizable newUser, String email) throws Exception {
+    private boolean processGroups(ResourceResolver resourceResolver, UserManager userManager, String[] groupNames, Authorizable wfUser, String email,boolean fromScheduler) throws Exception {
 
         boolean matched = false;
         for (String groupName : groupNames) {
@@ -56,11 +56,12 @@ public class WorkfrontUserSyncServiceImpl implements WorkfrontUserSyncService {
             Authorizable groupAuth = userManager.getAuthorizable(groupName);
 
             if (groupAuth == null || !groupAuth.isGroup()) {
+                log.warn("Group {} does not exist or is not a valid group", groupName);
                 continue;
             }
 
             Group group = (Group) groupAuth;
-
+            boolean shouldBeMember = false;
             Iterator<Authorizable> members = group.getMembers();
 
             while (members.hasNext()) {
@@ -74,19 +75,31 @@ public class WorkfrontUserSyncServiceImpl implements WorkfrontUserSyncService {
 
                     if (email.equalsIgnoreCase(memberEmail)) {
 
-                        if (!group.isMember(newUser)) {
-                            boolean userAdded = group.addMember(newUser);
+                        if (!group.isMember(wfUser)) {
+                            boolean userAdded = group.addMember(wfUser);
                             if(userAdded){
                                 Session session = resourceResolver.adaptTo(Session.class);
                                 if (session != null) {
                                     session.save();
                                 }
-                                log.info("Added {} to group {}", newUser.getID(), groupName);
+                                log.info("Added {} to group {}", wfUser.getID(), groupName);
                             }
                         }
-
+                        shouldBeMember = true;
                         matched = true;
                     }
+                }
+            }
+
+            //remove outdated membership (scheduler only)
+            if (fromScheduler && !shouldBeMember && group.isMember(wfUser)) {
+                boolean userRemoved = group.removeMember(wfUser);
+                if(userRemoved){
+                    Session session = resourceResolver.adaptTo(Session.class);
+                    if (session != null) {
+                        session.save();
+                    }
+                    log.info("Removed Workfront user {} from group {} (AEM user no longer in group)", wfUser.getID(), groupName);
                 }
             }
         }

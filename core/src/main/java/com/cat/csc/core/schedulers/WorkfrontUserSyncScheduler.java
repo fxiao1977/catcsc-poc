@@ -1,7 +1,7 @@
 package com.cat.csc.core.schedulers;
 
 import com.cat.csc.core.service.WorkfrontUserSyncService;
-import com.cat.csc.core.service.impl.SharedUserSyncConfigProvider;
+import com.cat.csc.core.service.SharedUserSyncConfigProvider;
 import org.apache.jackrabbit.api.security.user.*;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
@@ -81,7 +81,7 @@ public class WorkfrontUserSyncScheduler implements Runnable {
 
             while (members.hasNext()) {
                 Authorizable wfUser = members.next();
-                syncService.syncUser(resolver, wfUser);
+                syncService.syncUser(resolver, wfUser, true);
             }
 
         } catch (Exception e) {
