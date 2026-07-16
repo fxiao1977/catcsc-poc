@@ -70,7 +70,6 @@ public class WorkfrontGoupChangeListener implements EventListener {
             return;
         }
 
-        String exactGroupPath = null;
         try {
             UserManager userManager = resolver.adaptTo(UserManager.class);
             if (userManager == null) return;

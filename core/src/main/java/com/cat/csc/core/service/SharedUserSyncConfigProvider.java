@@ -1,7 +1,5 @@
 package com.cat.csc.core.service;
 
-import java.util.List;
-
 public interface SharedUserSyncConfigProvider {
     boolean isEnabled();
 
