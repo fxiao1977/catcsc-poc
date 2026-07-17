@@ -33,9 +33,21 @@ public class WorkfrontUserSyncScheduler implements Runnable {
     private Scheduler scheduler;
 
     @Activate
-    @Modified
     protected void activate() {
         addScheduler();
+    }
+
+    // On component modification change status will remove and add scheduler
+    @Modified
+    protected void modified() {
+        removeScheduler();
+        addScheduler();
+    }
+
+    // On deactivate component it will unschedule scheduler
+    @Deactivate
+    protected void deactivate() {
+        removeScheduler();
     }
 
     private void addScheduler() {
@@ -53,6 +65,12 @@ public class WorkfrontUserSyncScheduler implements Runnable {
         scheduler.schedule(this, options);
         log.info("CATCSC Permission Sync Scheduler activated. Cron={}",
                 sharedUserSyncConfigProvider.getJobCron());
+    }
+
+
+    // Custom method to deactivate or unschedule scheduler
+    public void removeScheduler() {
+        scheduler.unschedule(sharedUserSyncConfigProvider.getScheduler_name());
     }
 
     @Override

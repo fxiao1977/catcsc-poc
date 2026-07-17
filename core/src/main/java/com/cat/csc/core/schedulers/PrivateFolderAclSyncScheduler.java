@@ -54,9 +54,21 @@ public class PrivateFolderAclSyncScheduler implements Runnable {
 
 
     @Activate
-    @Modified
     protected void activate(final PrivateFolderAclSyncSchedulerConfiguration config) {
          addScheduler(config);
+    }
+
+    // On deactivate component it will unschedule scheduler
+    @Deactivate
+    protected void deactivate(PrivateFolderAclSyncSchedulerConfiguration config) {
+        removeScheduler(config);
+    }
+
+    // On component modification change status will remove and add scheduler
+    @Modified
+    protected void modified(PrivateFolderAclSyncSchedulerConfiguration config) {
+        removeScheduler(config);
+        addScheduler(config);
     }
 
     private void addScheduler(PrivateFolderAclSyncSchedulerConfiguration config) {
@@ -77,23 +89,9 @@ public class PrivateFolderAclSyncScheduler implements Runnable {
                 config.scheduler_expression(), config.rootPath());
     }
 
-
     // Custom method to deactivate or unschedule scheduler
     public void removeScheduler(PrivateFolderAclSyncSchedulerConfiguration config) {
         scheduler.unschedule(config.scheduler_name());
-    }
-
-    // On deactivate component it will unschedule scheduler
-    @Deactivate
-    protected void deactivate(PrivateFolderAclSyncSchedulerConfiguration config) {
-        removeScheduler(config);
-    }
-
-    // On component modification change status will remove and add scheduler
-    @Modified
-    protected void modified(PrivateFolderAclSyncSchedulerConfiguration config) {
-        removeScheduler(config);
-        addScheduler(config);
     }
 
     @Override
