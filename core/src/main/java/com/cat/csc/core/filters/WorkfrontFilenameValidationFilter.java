@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import com.google.gson.JsonObject;
 
 @Component(
         service = Filter.class,
@@ -74,25 +75,16 @@ public class WorkfrontFilenameValidationFilter implements Filter {
         if (invalidCharacter != null) {
 
             slingResponse.setStatus(
-                    HttpServletResponse.SC_BAD_REQUEST);
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
             slingResponse.setContentType("application/json");
             slingResponse.setCharacterEncoding("UTF-8");
 
-            String json =
-                    "{"
-                            + "\"success\":false,"
-                            + "\"errorCode\":\"INVALID_FILE_NAME\","
-                            + "\"message\":\""
-                            + escapeJson(config.errorMessage())
-                            + "\","
-                            + "\"fileName\":\""
-                            + escapeJson(fileName)
-                            + "\","
-                            + "\"invalidCharacter\":\""
-                            + escapeJson(invalidCharacter)
-                            + "\""
-                            + "}";
+            String message = config.errorMessage()+" Invalid character: '"+ escapeJson(invalidCharacter)+"'";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("status", "error");
+            jsonObject.addProperty("error", message);
+            String json = jsonObject.toString();
 
             slingResponse.getWriter().write(json);
 

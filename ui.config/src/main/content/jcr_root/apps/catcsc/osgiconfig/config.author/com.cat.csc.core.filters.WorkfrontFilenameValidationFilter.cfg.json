@@ -27,5 +27,5 @@
     "}",
     "="
   ],
-  "errorMessage": "Invalid file name. Please remove special characters from the file name and try again."
+  "errorMessage": "File name contains invalid special characters."
 }
