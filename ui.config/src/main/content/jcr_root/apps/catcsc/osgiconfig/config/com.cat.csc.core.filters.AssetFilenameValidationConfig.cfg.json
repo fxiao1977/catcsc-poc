@@ -1,7 +1,0 @@
-{
-  "enabled": true,
-  "targetFolderPattern": "^/content/dam(/.*)?$",
-  "invalidCharacterRegex": "[\\\\/:*?\"<>|{}\\[\\];#%^&+=@!`~]",
-  "validatePost": true,
-  "validatePut": true
-}
